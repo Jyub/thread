@@ -1,5 +1,7 @@
 package com.wy.yubiao.thread.state;
 
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * @version v1.0
  * @author: yubiao
@@ -119,12 +121,43 @@ public class ThreadCommunication {
         System.out.println("生产出包子了");
     }
 
-    static void parkUnpark(){
-        new Thread(()->{
-           while (baozi == null){
-               
-           }
+    static void parkUnpark() throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            while (baozi == null) {
+                System.out.println("包子铺没有包子，进入等待");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                LockSupport.park();
+            }
+            System.out.println("买到包子了");
         });
+        thread.start();
+        Thread.sleep(100);
+        baozi = new ThreadCommunication();
+        LockSupport.unpark(thread);
+        System.out.println("生产出包子了");
+    }
+
+    static void parkUnparkDeadLock() throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            while (baozi == null) {
+                System.out.println("包子铺没有包子，进入等待");
+                synchronized (ThreadCommunication.class){
+                    LockSupport.park();
+                }
+            }
+            System.out.println("买到包子了");
+        });
+        thread.start();
+        Thread.sleep(100);
+        baozi = new ThreadCommunication();
+        synchronized (ThreadCommunication.class){
+            LockSupport.unpark(thread);
+        }
+        System.out.println("生产出包子了");
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -137,6 +170,10 @@ public class ThreadCommunication {
         //wait 等待会释放持有的锁
         //waitNotify();
         //wait和notify 需要执行顺序，sleep 不会释放锁
-        waitNotifyDeadLock();
+        //waitNotifyDeadLock();
+        //park和unpark 解决了方法先后顺序的问题
+        //parkUnpark();
+        //park方法不会释放锁,造成死锁
+        parkUnparkDeadLock();
     }
 }
