@@ -17,7 +17,7 @@ public class NioServer {
     public static void main(String[] args) throws IOException {
         ServerSocketChannel channel = ServerSocketChannel.open();
         channel.configureBlocking(false);
-        channel.bind(new InetSocketAddress(8083));
+        channel.socket().bind(new InetSocketAddress(8083));
         System.out.println("服务器已启动,端口:"+channel.getLocalAddress());
         while (true){
             SocketChannel socketChannel = channel.accept();
