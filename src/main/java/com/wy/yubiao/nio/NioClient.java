@@ -15,7 +15,6 @@ import java.util.Scanner;
  * @description: NIO 客户端
  */
 public class NioClient {
-    private static final Charset CHARSET =  Charset.forName("UTF-8");
     public static void main(String[] args) throws IOException {
         SocketChannel socket = SocketChannel.open();
         socket.configureBlocking(false);//默认阻塞是开启的

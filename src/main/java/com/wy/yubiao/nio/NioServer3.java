@@ -1,9 +1,11 @@
 package com.wy.yubiao.nio;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -116,7 +118,7 @@ public class NioServer3 {
                     byte[] bytes = new byte[buffer.limit()];
                     buffer.get(bytes);
                     System.out.println(new String(bytes));
-                    System.out.println("收到新消息来自:"+sc.getRemoteAddress());
+                    System.out.println(Thread.currentThread().getName()+"收到新消息来自:"+sc.getRemoteAddress());
 
                     workPool.submit(()->{});
 
@@ -146,10 +148,38 @@ public class NioServer3 {
                     workEventLoop.doStart();
                     SelectionKey register = workEventLoop.register(socketChannel);
                     register.interestOps(SelectionKey.OP_READ);
-                    System.out.println("收到新连接:"+socketChannel.getRemoteAddress());
+                    System.out.println(Thread.currentThread().getName()+"收到新连接:"+socketChannel.getRemoteAddress());
                 }
             };
         }
     }
 
+    private void initAndRegister() throws Exception {
+        serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.configureBlocking(false);
+
+        int index = new Random().nextInt(mainReactor.length);
+        ReactorThread reactorThread = mainReactor[index];
+        reactorThread.doStart();
+        reactorThread.register(serverSocketChannel);
+        serverSocketChannel.register(reactorThread.selector,SelectionKey.OP_ACCEPT);
+    }
+
+
+    private void bind()throws IOException{
+        serverSocketChannel.bind(new InetSocketAddress(8083));
+        System.out.println("服务已启动"+serverSocketChannel.getLocalAddress());
+    }
+
+    public static void main(String[] args) {
+        NioServer3 server3 = new NioServer3();
+
+        try {
+            server3.initReactor();
+            server3.initAndRegister();
+            server3.bind();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
