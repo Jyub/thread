@@ -1,7 +1,9 @@
 package com.wy.yubiao.thread;
 
+import org.junit.Test;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -75,5 +77,12 @@ public class StrListSet {
         }
     }
 
-
+    @Test
+    public void test() throws Exception {
+        Set s = new HashSet();
+        s.add("foo");
+        Iterator i = s.iterator();
+        Method m = i.getClass().getMethod("hasNext", new Class[0]);
+        System.out.println(m.invoke(i, new Object[0]));
+    }
 }
