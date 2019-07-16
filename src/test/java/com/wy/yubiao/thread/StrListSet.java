@@ -77,12 +77,43 @@ public class StrListSet {
         }
     }
 
+    /**
+     * 排序数组并按数字出现次数排序
+     * @throws Exception
+     */
     @Test
     public void test() throws Exception {
-        Set s = new HashSet();
-        s.add("foo");
-        Iterator i = s.iterator();
-        Method m = i.getClass().getMethod("hasNext", new Class[0]);
-        System.out.println(m.invoke(i, new Object[0]));
+      int[] array = {1,4,4,1,3,2,1,2,10,10,111,101,101};
+      Map<Integer,Integer> map = new HashMap<>();
+      for (int i : array){
+          if (map.containsKey(i)){
+              map.put(i,map.get(i)+1);
+          }else {
+              map.put(i,1);
+          }
+      }
+        Set<Integer> set = map.keySet();
+        List<Integer> list = new ArrayList<>(set);
+        for (int i=0; i< list.size(); i++){
+            for (int j=i; j<list.size();j++){
+                if (list.get(i) > list.get(j)){
+                    int temp = list.get(i);
+                    list.set(i,list.get(j));
+                    list.set(j,temp);
+                }
+            }
+        }
+
+        for (int i=0; i<list.size(); i++ ){
+            for (int j=i; j<list.size(); j++){
+                if (map.get(list.get(i)) < map.get(list.get(j))){
+                    int temp = list.get(i);
+                    list.set(i,list.get(j));
+                    list.set(j,temp);
+                }
+            }
+            System.out.print(list.get(i)+"========");
+            System.out.println(map.get(list.get(i)));
+        }
     }
 }
