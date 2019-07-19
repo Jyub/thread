@@ -1,4 +1,4 @@
-package com.wy.yubiao.thread.lock;
+package com.wy.yubiao.thread.lock.demo;
 
 import java.util.ArrayList;
 import java.util.List;
