@@ -12,7 +12,7 @@ import java.util.concurrent.locks.Lock;
  */
 public class LockTest {
 
-    static  Lock lock = new ReentrantLockVersion1();
+    static  Lock lock = new JamesReentrantLock();
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -22,7 +22,7 @@ public class LockTest {
             //尝试获取锁，不阻塞
             boolean b = lock.tryLock();
             System.out.println("获取锁状态" + b);
-            System.out.println("进入线程");
+            System.out.println("进入线程"+Thread.currentThread().getName());
             lock.lock();
             System.out.println("获取到锁");
             lock.unlock();
@@ -43,9 +43,18 @@ public class LockTest {
                 System.out.println("i am interrupted");
             }*/
         });
-
+        Thread thread1 = new Thread(()->{
+            System.out.println("进入线程"+Thread.currentThread().getName());
+            lock.lock();
+            try {
+                System.out.println("正在执行"+Thread.currentThread().getName());
+            }finally {
+                lock.unlock();
+            }
+        });
         thread.start();
-        Thread.sleep(2000);
+        thread1.start();
+        Thread.sleep(5000);
         lock.unlock();
         //thread.interrupt();
     }

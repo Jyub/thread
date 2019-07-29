@@ -62,15 +62,19 @@ public class JamesReentrantLock implements Lock {
                     //再次尝试抢锁
                     if (!tryLock()){
                         //若抢锁失败，挂起线程，继续等待
+                        System.out.println("开始park"+Thread.currentThread().getName());
                         LockSupport.park();
+                        System.out.println("park 结束"+Thread.currentThread().getName());
                     }else{
                         //若成功，就出队列
                         waiters.poll();
                         return;
                     }
                 }else{
+                    System.out.println("开始park");
                     //如果不是，就挂起线程
                     LockSupport.park();
+                    System.out.println("park 结束");
                 }
             }
         }
