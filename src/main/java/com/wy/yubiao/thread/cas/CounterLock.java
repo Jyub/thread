@@ -12,12 +12,27 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CounterLock {
     public volatile int i;
     Lock lock = new ReentrantLock();
-    public synchronized void increament(){
+    public  void increament(){
+        lock.lock();
         lock.lock();
         try {
             i++;
         }finally {
             lock.unlock();
+            lock.unlock();
         }
+    }
+
+    public static void main(String[] args) throws Exception{
+        CounterLock counterLock = new CounterLock();
+        for (int i=0; i< 10; i++) {
+            new Thread(()->{
+               for (int j=0; j<10000;j++){
+                   counterLock.increament();
+               }
+            }).start();
+        }
+        Thread.sleep(3000L);
+        System.out.println(counterLock.i);
     }
 }

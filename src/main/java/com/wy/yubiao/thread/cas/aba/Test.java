@@ -10,7 +10,7 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class Test {
 
-    public static void main(String[] args) throws InterruptedException{
+    public static void main(String[] args) {
         Stack stack = new Stack();
 
         stack.push(new Node("B"));
