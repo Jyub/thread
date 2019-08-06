@@ -23,8 +23,6 @@ public class BioClient {
         System.out.println("请输入");
         String next = scanner.nextLine();
         outputStream.write(next.getBytes(CHARSET));
-        scanner.close();
-        socket.close();
 
     }
 }
