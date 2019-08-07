@@ -46,5 +46,12 @@ public class DynamicProxyTest {
         HelloProxy proxy = new HelloProxy(hello);
         IHello proxy1 = (IHello)proxy.proxy();
         proxy1.sayHello();
+        int[] a = new int[]{1,2,3,4};
+        int[] b = new int[a.length];
+        int num = 0;
+        for (int i = 0; i <a.length ; i++) {
+            b[i] = a[num++];
+            System.out.println(b[i]);
+        }
     }
 }
