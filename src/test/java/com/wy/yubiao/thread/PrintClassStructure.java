@@ -72,7 +72,7 @@ public class PrintClassStructure {
         for (Method method : methods) {
             if (Modifier.isAbstract(method.getModifiers()))
                 continue;
-            System.out.print("\t"+Modifier.toString(method.getModifiers())+" "+method.getReturnType()
+            System.out.print("\t"+Modifier.toString(method.getModifiers())+" "+method.getReturnType().getName()
                     +" "+method.getName()+"(");
             Class<?>[] parameterTypes = method.getParameterTypes();
             for (int i = 0; i < parameterTypes.length; i++) {
