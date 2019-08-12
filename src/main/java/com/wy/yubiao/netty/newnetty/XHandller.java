@@ -25,7 +25,7 @@ public class XHandller extends ChannelInboundHandlerAdapter {
         ByteBuf buf = (ByteBuf) msg;
         byte[] content = new byte[buf.readableBytes()];
         buf.readBytes(content);
-        System.out.println(Thread.currentThread()+ ": 最终打印"+new String(content));
+        System.out.println(Thread.currentThread() + ": 最终打印" + new String(content));
         ((ByteBuf) msg).release(); // 引用计数减一
         // ctx.fireChannelRead();
     }
