@@ -3,6 +3,10 @@ package com.wy.yubiao.thread;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @version v1.0
@@ -41,7 +45,7 @@ public class DynamicProxyTest {
     }
 
     public static void main(String[] args) {
-        System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
+        /*System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
         Hello hello = new Hello();
         HelloProxy proxy = new HelloProxy(hello);
         IHello proxy1 = (IHello)proxy.proxy();
@@ -52,6 +56,26 @@ public class DynamicProxyTest {
         for (int i = 0; i <a.length ; i++) {
             b[i] = a[num++];
             System.out.println(b[i]);
+        }*/
+
+        Map map = new HashMap();
+        map.put(1, "Hello");
+        map.putIfAbsent(1, "World");
+        print(map.get(1));
+        print(map.size());
+
+        map.put(1024, "A");
+        map.putIfAbsent(1024, "B");
+        print(map.get(1024));
+        print(map.size());
+
+        for (Object entry : map.entrySet()){
+            Map.Entry entry1 = (Map.Entry) entry;
+            System.out.println(entry1.getKey()+"="+entry1.getValue());
         }
+    }
+
+    private static void print(Object object) {
+        System.out.print(object + " ");
     }
 }

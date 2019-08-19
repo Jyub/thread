@@ -1,6 +1,8 @@
 package com.wy.yubiao.nio;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -23,21 +25,31 @@ public class NioClient {
         while (!socket.finishConnect()){
             Thread.yield();
         }
-       /* Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入:");*/
         String s = "GET / HTTP/1.1\n\rHost:www.baidu.com\n\r\n";
         ByteBuffer buffer = ByteBuffer.wrap(s.getBytes());
         while (buffer.hasRemaining()){
             socket.write(buffer);
         }
-        System.out.println("收到服务器响应");
         ByteBuffer buffer1 = ByteBuffer.allocate(1024);
         while ( socket.read(buffer1) != -1){
+            boolean flag = false;
             buffer1.flip();
             if(buffer1.limit() > 0) {
-                System.out.println(new String(buffer1.array()));
+                BufferedReader reader = new BufferedReader(new StringReader(new String(buffer1.array())));
+                String s1 = reader.readLine();
+                while (s1 != null){
+                    if (s1.contains("Server")){
+                        System.out.println(s1);
+                        flag = true;
+                        break;
+                    }
+                    s1 = reader.readLine();
+                }
             }
             buffer1.clear();
+            if (flag){
+                break;
+            }
         }
         /*buffer1.flip();
         byte[] bytes = new byte[buffer1.limit()];
